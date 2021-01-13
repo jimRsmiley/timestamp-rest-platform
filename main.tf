@@ -30,5 +30,6 @@ module "network" {
 module "eks_cluster" {
   source       = "./modules/eks-cluster"
   project_name = var.project_name
+  vpc_id       = module.network.vpc_id
   subnet_ids   = module.network.app_subnet_ids
 }
