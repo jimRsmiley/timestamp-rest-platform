@@ -25,6 +25,8 @@ resource "aws_subnet" "public" {
   map_public_ip_on_launch = true
 
   tags = {
-    Name = "tf-sn-${var.project_name}-public-${count.index}"
+    Name                                                     = "tf-sn-${var.project_name}-public-${count.index}"
+    "kubernetes.io/role/elb"                                 = 1
+    "kubernetes.io/cluster/tf-cluster-${var.project_name}-0" = "shared"
   }
 }
