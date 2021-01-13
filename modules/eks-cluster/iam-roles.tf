@@ -17,6 +17,31 @@ resource "aws_iam_role" "cluster" {
 POLICY
 }
 
+resource "aws_iam_role_policy" "cluster" {
+  name = "tf-role-cluster-policy-${var.project_name}-0"
+  role = aws_iam_role.cluster.id
+
+  policy = <<-EOF
+  {
+    "Version": "2012-10-17",
+    "Statement": [
+      {
+        "Action": [
+          "ec2:Describe*"
+        ],
+        "Effect": "Allow",
+        "Resource": "*"
+      }
+    ]
+  }
+  EOF
+}
+
+# resource "aws_iam_role_policy_attachment" "cluster-custom-policy-attach" {
+#   policy_arn = aws_iam_role_policy.cluster.arn
+#   role       = aws_iam_role.cluster.name
+# }
+
 resource "aws_iam_role_policy_attachment" "cluster-AmazonEKSClusterPolicy" {
   policy_arn = "arn:aws:iam::aws:policy/AmazonEKSClusterPolicy"
   role       = aws_iam_role.cluster.name

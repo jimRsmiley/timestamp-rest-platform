@@ -1,14 +1,17 @@
 apiVersion: extensions/v1beta1
 kind: Ingress
 metadata:
-  name: timestamp-app-ingress
+  name: ingress
   annotations:
-    kubernetes.io/ingress.class: nginx
+    nginx.ingress.kubernetes.io/ssl-redirect: "false"
+    nginx.ingress.kubernetes.io/force-ssl-redirect: "false"
+    nginx.ingress.kubernetes.io/rewrite-target: /
 spec:
   rules:
   - http:
-    paths:
-    - path: /
-      backend:
-        serviceName: timestamp-app
-        servicePort: 80
+      paths:
+      - path: /
+        pathType: Prefix
+        backend:
+          serviceName: timestamp-app
+          servicePort: 80
