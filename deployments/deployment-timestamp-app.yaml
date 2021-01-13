@@ -17,13 +17,6 @@ spec:
         name: timestamp-app
         ports:
         - containerPort: 80
-        resources:
-          limits:
-            cpu: 100m
-            memory: 256M
-          requests:
-            cpu: 100m
-            memory: 256M
 ---
 apiVersion: v1
 kind: Service
