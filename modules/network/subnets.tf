@@ -19,9 +19,10 @@ resource "aws_subnet" "app" {
 resource "aws_subnet" "public" {
   count = 2
 
-  vpc_id            = aws_vpc.default.id
-  cidr_block        = "10.10.2${count.index}.0/24"
-  availability_zone = data.aws_availability_zones.available.names[count.index + local.az_index_offset]
+  vpc_id                  = aws_vpc.default.id
+  cidr_block              = "10.10.2${count.index}.0/24"
+  availability_zone       = data.aws_availability_zones.available.names[count.index + local.az_index_offset]
+  map_public_ip_on_launch = true
 
   tags = {
     Name = "tf-sn-${var.project_name}-public-${count.index}"

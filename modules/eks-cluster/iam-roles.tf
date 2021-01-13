@@ -24,10 +24,10 @@ resource "aws_iam_role_policy_attachment" "cluster-AmazonEKSClusterPolicy" {
 
 # # Optionally, enable Security Groups for Pods
 # # Reference: https://docs.aws.amazon.com/eks/latest/userguide/security-groups-for-pods.html
-# resource "aws_iam_role_policy_attachment" "cluster-AmazonEKSVPCResourceController" {
-#   policy_arn = "arn:aws:iam::aws:policy/AmazonEKSVPCResourceController"
-#   role       = aws_iam_role.example.name
-# }
+resource "aws_iam_role_policy_attachment" "cluster-AmazonEKSVPCResourceController" {
+  policy_arn = "arn:aws:iam::aws:policy/AmazonEKSVPCResourceController"
+  role       = aws_iam_role.cluster.name
+}
 
 resource "aws_iam_role" "node_group" {
   name = "tf-role-eks-node-group-${var.project_name}-0"
