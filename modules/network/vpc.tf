@@ -7,3 +7,11 @@ resource "aws_vpc" "default" {
     Name = "tf-vpc-${var.project_name}-0"
   }
 }
+
+resource "aws_internet_gateway" "default" {
+  vpc_id = aws_vpc.default.id
+
+  tags = {
+    Name = "tf-igw-${var.project_name}-0"
+  }
+}
