@@ -38,7 +38,10 @@ resource "aws_iam_role_policy" "codebuild" {
     {
       "Effect": "Allow",
       "Resource": [
-        "*"
+        "${aws_s3_bucket.codepipeline_artifacts.arn}",
+        "${aws_s3_bucket.codepipeline_artifacts.arn}/*",
+        "${aws_s3_bucket.codepipeline_source.arn}",
+        "${aws_s3_bucket.codepipeline_source.arn}/*"
       ],
       "Action": [
         "s3:*"
@@ -59,11 +62,17 @@ resource "aws_codebuild_project" "default" {
     type = "CODEPIPELINE"
   }
 
+  cache {
+    type  = "LOCAL"
+    modes = ["LOCAL_DOCKER_LAYER_CACHE", "LOCAL_SOURCE_CACHE"]
+  }
+
   environment {
     compute_type                = "BUILD_GENERAL1_SMALL"
-    image                       = "aws/codebuild/standard:1.0"
+    image                       = "aws/codebuild/amazonlinux2-x86_64-standard:3.0"
     type                        = "LINUX_CONTAINER"
     image_pull_credentials_type = "CODEBUILD"
+    privileged_mode             = true
   }
 
   source {
