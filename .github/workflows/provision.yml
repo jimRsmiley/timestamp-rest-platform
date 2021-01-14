@@ -23,3 +23,6 @@ jobs:
       
     - name: Provision infra
       run: cd terraform && terraform init && terraform apply --auto-approve
+      env: # Or as an environment variable
+        AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+        AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
