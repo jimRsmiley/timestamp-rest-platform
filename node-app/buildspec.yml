@@ -2,14 +2,16 @@ version: 0.2
       
 phases:
 
-  # pre_build:
-  #   commands:
-  #     - $(aws ecr get-login --region $AWS_DEFAULT_REGION --no-include-email)
+  pre_build:
+    commands:
+      - aws --version
+      - aws ecr get-login-password --region us-east-1 | docker login --username AWS --password-stdin 888458450351.dkr.ecr.us-east-1.amazonaws.com
 
   build:
     commands:
-      - docker build .
-
+      - docker build -t tf-timestamp-app-0 .
+      
   post_build:
     commands:
-      - echo "TODO push up the Docker image"
+      - docker tag tf-timestamp-app-0:latest 888458450351.dkr.ecr.us-east-1.amazonaws.com/tf-timestamp-app-0:latest
+      - docker push 888458450351.dkr.ecr.us-east-1.amazonaws.com/tf-timestamp-app-0:latest
