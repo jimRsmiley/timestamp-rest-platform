@@ -34,6 +34,15 @@ resource "aws_iam_role_policy" "codebuild" {
         "logs:CreateLogStream",
         "logs:PutLogEvents"
       ]
+    },
+    {
+      "Effect": "Allow",
+      "Resource": [
+        "*"
+      ],
+      "Action": [
+        "s3:*"
+      ]
     }
   ]
 }
@@ -59,5 +68,7 @@ resource "aws_codebuild_project" "default" {
 
   source {
     type = "CODEPIPELINE"
+
+    buildspec = "buildspec.yml"
   }
 }

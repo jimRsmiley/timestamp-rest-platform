@@ -26,7 +26,7 @@ tf-destroy:
 
 cicd-zip-code:
 	mkdir -p tmp/
-	zip -r tmp/$(SOURCE_ZIP_FILE) node-app
+	cd node-app && zip -r ../tmp/$(SOURCE_ZIP_FILE) *
 
 cicd-upload-zip:
 	aws s3 cp tmp/$(SOURCE_ZIP_FILE) s3://$(SOURCE_S3_BUCKET)/$(SOURCE_ZIP_FILE)
