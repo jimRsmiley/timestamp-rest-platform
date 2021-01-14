@@ -1,5 +1,5 @@
 resource "aws_s3_bucket" "codepipeline_source" {
-  bucket = "tf-codepipeline-source-${var.project_name}"
+  bucket = var.codebuild_source_s3_bucket_name
   acl    = "private"
 }
 

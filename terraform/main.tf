@@ -35,7 +35,8 @@ module "eks_cluster" {
 }
 
 module "code_pipeline" {
-  source                         = "./modules/code-pipeline"
-  project_name                   = var.project_name
-  service_s3_deploy_conf_zip_key = "timestamp-app.zip"
+  source                          = "./modules/code-pipeline"
+  project_name                    = var.project_name
+  service_s3_deploy_conf_zip_key  = "timestamp-app.zip"
+  codebuild_source_s3_bucket_name = "tf-codepipeline-source-${var.project_name}"
 }
