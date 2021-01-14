@@ -1,3 +1,4 @@
+tmp/
 *.auto.tfvars
 *.swp
 *.tfstate*

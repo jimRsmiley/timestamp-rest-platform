@@ -1,6 +1,8 @@
 current_dir = $(shell pwd)
 TERRAFORM_CMD = cd terraform && terraform
 TERRAFORM_VARS_FILE= $(current_dir)/terraform.auto.tfvars
+SOURCE_ZIP_FILE = timestamp-app.zip
+SOURCE_S3_BUCKET = tf-codepipeline-source-timestamp-app
 
 default: provision
 
@@ -19,6 +21,13 @@ tf-apply:
 
 tf-destroy:
 	$(TERRAFORM_CMD) destroy --auto-approve
+
+cicd-zip-code:
+	mkdir -p tmp/
+	zip -r tmp/$(SOURCE_ZIP_FILE) node-app
+
+cicd-upload-zip:
+	aws s3 cp tmp/$(SOURCE_ZIP_FILE) s3://$(SOURCE_S3_BUCKET)/$(SOURCE_ZIP_FILE)
 
 provision-cluster:
 	aws eks --region us-east-1 update-kubeconfig --name tf-cluster-timestamp-app-0
