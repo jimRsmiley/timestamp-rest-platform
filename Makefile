@@ -2,7 +2,12 @@ CLUSTER_NAME=tf-cluster-timestamp-app-0
 
 default: provision
 
-provision:
+provision: tf-apply
+
+tf-plan:
+	terraform plan
+	
+tf-apply:
 	terraform apply --auto-approve
 
 provision-cluster:
