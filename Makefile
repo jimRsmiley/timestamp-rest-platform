@@ -3,6 +3,7 @@ TERRAFORM_CMD = cd terraform && terraform
 TERRAFORM_VARS_FILE= $(current_dir)/terraform.auto.tfvars
 SOURCE_ZIP_FILE = timestamp-app.zip
 SOURCE_S3_BUCKET = tf-codepipeline-source-timestamp-app
+ARTIFACT_S3_BUCKET = tf-codepipeline-artifacts-timestamp-app
 
 CURRENT_REGION := $(shell aws ec2 describe-availability-zones --output text --query 'AvailabilityZones[0].[RegionName]' | cat)
 CLUSTER_NAME = tf-cluster-timestamp-app-0
@@ -13,7 +14,11 @@ provision: tf-apply
 
 deploy: cicd-zip-code cicd-upload-zip
 
-clean: tf-destroy
+clean: s3-clean kube-delete tf-destroy
+
+s3-clean:
+	aws s3 rm s3://$(SOURCE_S3_BUCKET) --recursive
+	aws s3 rm s3://$(ARTIFACT_S3_BUCKET) --recursive
 
 tf-init:
 	$(TERRAFORM_CMD) init
@@ -40,3 +45,6 @@ provision-cluster: kube-update-config
 
 kube-update-config:
 	aws eks --region $(CURRENT_REGION) update-kubeconfig --name $(CLUSTER_NAME)
+
+kube-delete:
+	kubectl delete ns ingress-nginx
