@@ -16,4 +16,4 @@ build:
 	cd node-app && docker push 888458450351.dkr.ecr.us-east-1.amazonaws.com/timestamp-app:latest
 
 clean:
-	terraform destroy
+	terraform destroy --auto-approve
