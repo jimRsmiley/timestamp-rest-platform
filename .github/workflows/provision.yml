@@ -11,3 +11,9 @@ jobs:
 
     - name: Add Hashi gpg key
       run: curl -fsSL https://apt.releases.hashicorp.com/gpg | sudo apt-key add -
+
+    - name: Add the Hashi apt repo
+      run: apt-add-repository "deb [arch=$(dpkg --print-architecture)] https://apt.releases.hashicorp.com $(lsb_release -cs) main"
+    
+    - name: Install the terraform command
+      run: apt install terraform
