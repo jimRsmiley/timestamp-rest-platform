@@ -1,3 +1,4 @@
+*.auto.tfvars
 *.swp
 *.tfstate*
 node_modules/

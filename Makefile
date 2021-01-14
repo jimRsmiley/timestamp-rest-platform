@@ -1,4 +1,6 @@
+current_dir = $(shell pwd)
 TERRAFORM_CMD = cd terraform && terraform
+TERRAFORM_VARS_FILE= $(current_dir)/terraform.auto.tfvars
 
 default: provision
 
@@ -6,15 +8,18 @@ provision: tf-apply
 
 clean: tf-destroy
 
+tf-init:
+	$(TERRAFORM_CMD) init
+
 tf-plan:
-	$(TERRAFORM_CMD) plan
+	$(TERRAFORM_CMD) plan -var-file=$(TERRAFORM_VARS_FILE)
 
 tf-apply:
-	$(TERRAFORM_CMD) apply --auto-approve
+	$(TERRAFORM_CMD) apply --auto-approve -var-file=$(TERRAFORM_VARS_FILE)
 
 tf-destroy:
 	$(TERRAFORM_CMD) destroy --auto-approve
-	
+
 provision-cluster:
 	aws eks --region us-east-1 update-kubeconfig --name tf-cluster-timestamp-app-0
 	kubectl apply -f https://raw.githubusercontent.com/kubernetes/ingress-nginx/controller-v0.43.0/deploy/static/provider/aws/deploy.yaml

@@ -35,6 +35,7 @@ module "eks_cluster" {
 }
 
 module "code_pipeline" {
-  source       = "./modules/code-pipeline"
-  project_name = var.project_name
+  source                         = "./modules/code-pipeline"
+  project_name                   = var.project_name
+  service_s3_deploy_conf_zip_key = "timestamp-app.zip"
 }
