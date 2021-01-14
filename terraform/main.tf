@@ -33,3 +33,8 @@ module "eks_cluster" {
   vpc_id       = module.network.vpc_id
   subnet_ids   = module.network.app_subnet_ids
 }
+
+module "code_pipeline" {
+  source       = "./modules/code-pipeline"
+  project_name = var.project_name
+}
