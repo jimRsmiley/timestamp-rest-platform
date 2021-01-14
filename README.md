@@ -1,5 +1,13 @@
 # Timestamp REST App platform
 
+## Setup
+
+### Cloud infrastructure
+
+The AWS infrastructure can be provisioned with the command:
+
+`terraform plan && terraform apply`
+
 ## To-Dos
 
 * Create a bootstrap process. (Makefile, ansible etc) to
