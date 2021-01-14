@@ -1,18 +1,20 @@
+TERRAFORM_CMD = cd terraform && terraform
+
 default: provision
 
 provision: tf-apply
 
-tf-plan:
-	terraform plan
-
-tf-apply:
-	terraform apply --auto-approve
-
-tf-destroy:
-	terraform destroy --auto-approve
-
 clean: tf-destroy
 
+tf-plan:
+	$(TERRAFORM_CMD) plan
+
+tf-apply:
+	$(TERRAFORM_CMD) apply --auto-approve
+
+tf-destroy:
+	$(TERRAFORM_CMD) destroy --auto-approve
+	
 provision-cluster:
 	aws eks --region us-east-1 update-kubeconfig --name tf-cluster-timestamp-app-0
 	kubectl apply -f https://raw.githubusercontent.com/kubernetes/ingress-nginx/controller-v0.43.0/deploy/static/provider/aws/deploy.yaml
