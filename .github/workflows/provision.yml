@@ -18,5 +18,8 @@ jobs:
     - name: Install the terraform command
       run: sudo apt install terraform
 
+    - name: Copy provider.tf into working dir
+      run: cp ./github/provisioning/terraform/provider.tf terraform/provider.tf
+      
     - name: Provision infra
       run: cd terraform && terraform init && terraform apply --auto-approve
