@@ -4,6 +4,9 @@ TERRAFORM_VARS_FILE= $(current_dir)/terraform.auto.tfvars
 SOURCE_ZIP_FILE = timestamp-app.zip
 SOURCE_S3_BUCKET = tf-codepipeline-source-timestamp-app
 
+CURRENT_REGION := $(shell aws ec2 describe-availability-zones --output text --query 'AvailabilityZones[0].[RegionName]' | cat)
+CLUSTER_NAME = tf-cluster-timestamp-app-0
+
 default: provision
 
 provision: tf-apply
@@ -31,12 +34,9 @@ cicd-zip-code:
 cicd-upload-zip:
 	aws s3 cp tmp/$(SOURCE_ZIP_FILE) s3://$(SOURCE_S3_BUCKET)/$(SOURCE_ZIP_FILE)
 
-provision-cluster:
-	aws eks --region us-east-1 update-kubeconfig --name tf-cluster-timestamp-app-0
+provision-cluster: kube-update-config
 	kubectl apply -f https://raw.githubusercontent.com/kubernetes/ingress-nginx/controller-v0.43.0/deploy/static/provider/aws/deploy.yaml
+	kubectl apply -f deployments
 
-build:
-	cd node-app && docker build -t timestamp-app . && \
-		docker tag timestamp-app 888458450351.dkr.ecr.us-east-1.amazonaws.com/timestamp-app:latest
-	aws ecr get-login-password --region us-east-1 | docker login --username AWS --password-stdin 888458450351.dkr.ecr.us-east-1.amazonaws.com
-	cd node-app && docker push 888458450351.dkr.ecr.us-east-1.amazonaws.com/timestamp-app:latest
+kube-update-config:
+	aws eks --region $(CURRENT_REGION) update-kubeconfig --name $(CLUSTER_NAME)
