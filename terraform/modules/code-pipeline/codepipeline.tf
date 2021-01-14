@@ -1,6 +1,10 @@
 resource "aws_s3_bucket" "codepipeline_source" {
   bucket = var.codebuild_source_s3_bucket_name
   acl    = "private"
+
+  versioning {
+    enabled = true
+  }
 }
 
 resource "aws_s3_bucket" "codepipeline_artifacts" {
@@ -95,7 +99,9 @@ resource "aws_iam_role_policy" "codepipeline_policy" {
       ],
       "Resource": [
         "${aws_s3_bucket.codepipeline_artifacts.arn}",
-        "${aws_s3_bucket.codepipeline_artifacts.arn}/*"
+        "${aws_s3_bucket.codepipeline_artifacts.arn}/*",
+        "${aws_s3_bucket.codepipeline_source.arn}",
+        "${aws_s3_bucket.codepipeline_source.arn}/*"
       ]
     },
     {

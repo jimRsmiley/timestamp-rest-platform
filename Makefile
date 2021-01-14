@@ -17,7 +17,7 @@ tf-plan:
 	$(TERRAFORM_CMD) plan -var-file=$(TERRAFORM_VARS_FILE)
 
 tf-apply:
-	$(TERRAFORM_CMD) apply --auto-approve -var-file=$(TERRAFORM_VARS_FILE)
+	$(TERRAFORM_CMD) apply -var-file=$(TERRAFORM_VARS_FILE)
 
 tf-destroy:
 	$(TERRAFORM_CMD) destroy --auto-approve
