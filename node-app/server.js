@@ -3,7 +3,7 @@
 const express = require('express');
 
 // Constants
-const PORT = 3000;
+const PORT = process.env.PORT || 3000;
 const HOST = '0.0.0.0';
 
 const STATIC_TEXT = process.env.APP_STATIC_TEXT || 'Automate all the things!';
