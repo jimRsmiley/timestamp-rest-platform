@@ -1,0 +1,13 @@
+name: Provision an environment
+
+on: push
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v2
+
+    - name: Add Hashi gpg key
+      run: curl -fsSL https://apt.releases.hashicorp.com/gpg | sudo apt-key add -
