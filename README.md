@@ -1,6 +1,18 @@
 # Timestamp REST App platform
 
-## Setup
+## Prerequisites
+
+* Terraform v0.14.2
+* The `zip` command
+* AWS CLI version 2
+
+## Initialization
+
+Run the shell script [./init.sh](./init.sh).
+
+The script will:
+
+1. Provision the AWS environment using Terraform
 
 ### Cloud infrastructure
 
@@ -16,10 +28,7 @@ Builds are triggered by uploading the source code in a zipfile up to the S3 buck
 
 ## To-Dos
 
-* Finish 
-  * Run the Terraform code
-  * Build the Node.js Docker image and push it
-  * Deploy the image to the EKS cluster
+* the init.sh bootstrap script does the full run.
 
 ## Directory Structure
 
