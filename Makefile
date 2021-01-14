@@ -8,6 +8,8 @@ default: provision
 
 provision: tf-apply
 
+deploy: cicd-zip-code cicd-upload-zip
+
 clean: tf-destroy
 
 tf-init:
