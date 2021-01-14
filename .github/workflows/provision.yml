@@ -17,3 +17,6 @@ jobs:
     
     - name: Install the terraform command
       run: sudo apt install terraform
+
+    - name: Provision infra
+      run: cd terraform && terraform init && terraform apply --auto-approve
