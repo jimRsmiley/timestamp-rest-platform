@@ -2,11 +2,19 @@ name: Provision an environment
 
 on: push
 
+env: # Or as an environment variable
+  AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+  AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+  AWS_DEFAULT_REGION: us-east-1
+  
 jobs:
   build:
     runs-on: ubuntu-latest
 
     steps:
+    - name: output region env
+      run: echo $AWS_DEFAULT_REGION
+      
     - uses: actions/checkout@v2
 
     - name: Add Hashi gpg key
@@ -23,7 +31,4 @@ jobs:
       
     - name: Provision infra
       run: cd terraform && terraform init && terraform apply --auto-approve
-      env: # Or as an environment variable
-        AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
-        AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-        AWS_DEFAULT_REGION: us-east-1
+
