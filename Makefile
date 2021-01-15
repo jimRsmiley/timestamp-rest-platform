@@ -39,7 +39,7 @@ cicd-zip-code:
 cicd-upload-zip:
 	aws s3 cp tmp/$(SOURCE_ZIP_FILE) s3://$(SOURCE_S3_BUCKET)/$(SOURCE_ZIP_FILE)
 
-provision-cluster: kube-update-config
+kube-provision-cluster: kube-update-config
 	kubectl apply -f https://raw.githubusercontent.com/kubernetes/ingress-nginx/controller-v0.43.0/deploy/static/provider/aws/deploy.yaml
 	kubectl apply -f deployments
 
