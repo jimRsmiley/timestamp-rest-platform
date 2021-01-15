@@ -11,11 +11,6 @@ jobs:
     name: "Terraform"
     runs-on: ubuntu-latest
     steps:
-
-      - name: Dump GitHub context
-        env:
-          GITHUB_CONTEXT: ${{ toJson(github) }}
-        run: echo "$GITHUB_CONTEXT"
         
       - name: Checkout
         uses: actions/checkout@v2
@@ -26,6 +21,9 @@ jobs:
           # terraform_version: 0.13.0:
           cli_config_credentials_token: ${{ secrets.TF_API_TOKEN }}
 
+      - name: Output Terraform version
+        run: terraform version
+        
       - name: Terraform Format
         id: fmt
         run: cd terraform && terraform fmt -check
