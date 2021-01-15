@@ -98,7 +98,7 @@ jobs:
       - name: Add cluster region to environment variables
         id: cluster_region
         run: |
-          echo ::set-output name=cluster_region::'$(terraform output -json eks_cluster_region)'
+          echo ::set-output name=cluster_region::$(terraform output -json eks_cluster_region)
 
       - name: Echo cluster region
         run: |
