@@ -1,14 +1,13 @@
 locals {
-  zipfile_path       = "../tmp/timestamp-app.zip"
+  zipfile_path       = "./timestamp-app.zip"
   source_dir         = "../node-app"
   zipfile_object_key = "timestamp-app.zip"
 }
 
 data "archive_file" "codepipeline_source" {
-
   type        = "zip"
-  output_path = local.zipfile_path
   source_dir  = local.source_dir
+  output_path = local.zipfile_path
 }
 
 resource "aws_s3_bucket_object" "codepipeline_source" {
@@ -17,8 +16,6 @@ resource "aws_s3_bucket_object" "codepipeline_source" {
 
   key    = local.zipfile_object_key
   acl    = "private" # or can be "public-read"
-  source = local.zipfile_path
-  etag   = filemd5(local.zipfile_path)
-
-  depends_on = [data.archive_file.codepipeline_source]
+  source = data.archive_file.codepipeline_source.output_path
+  etag   = filemd5(data.archive_file.codepipeline_source.output_path)
 }
