@@ -84,19 +84,19 @@ jobs:
         run: cd ./terraform && terraform apply -auto-approve
 
       - name: Add cluster region to environment variables
-        id: cluster_region
-        run: cd ./terraform && echo "::set-output name=cluster_region::$(terraform output -json eks_cluster_region | sed 's/"//g' | sed 's/\n//g')"
+        id: region
+        run: cd ./terraform && echo "::set-output name=region::$(terraform output -json eks_cluster_region | sed 's/"//g' | sed 's/\n//g')"
 
       - name: Dump GitHub context
         env:
-          GITHUB_CONTEXT: ${{ toJson(steps.cluster_region.outputs) }}
+          GITHUB_CONTEXT: ${{ toJson(steps.region) }}
         run: echo "$GITHUB_CONTEXT"
 
       - name: Echo cluster region
         run: |
           echo "Cluser region is here: $cluster_region"
         env:
-          cluster_region: ${{ steps.cluster_region.outputs.cluster_region}}
+          cluster_region: ${{ steps.region.outputs.region }}
 
       - name: Test the jq command
         run: terraform output -json eks_cluster_region | jq -r '.'
