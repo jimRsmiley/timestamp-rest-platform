@@ -12,7 +12,7 @@ mkdir -p tmp/
 cd terraform
 
 terraform init
-terraform apply --auto-approve
+AWS_DEFAULT_REGION=us-east-1 terraform apply --auto-approve
 
 cd ..
 
