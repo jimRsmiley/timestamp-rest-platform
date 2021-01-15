@@ -96,7 +96,7 @@ jobs:
         run: |
           echo "Cluser region is here: $cluster_region"
         env:
-          cluster_region: ${{ steps.region.outputs.region }}
+          cluster_region: ${{ steps.region.outputs.stdout }}
 
       - name: Test the jq command
         run: terraform output -json eks_cluster_region | jq -r '.'
