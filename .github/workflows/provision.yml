@@ -2,8 +2,6 @@ name: "Provision Infrastructure"
 
 on:
   push:
-    branches:
-      - master
   pull_request:
 
 jobs:
