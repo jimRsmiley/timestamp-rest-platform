@@ -1,12 +1,11 @@
 current_dir = $(shell pwd)
 TERRAFORM_CMD = cd terraform && terraform
-TERRAFORM_VARS_FILE= $(current_dir)/terraform.auto.tfvars
 SOURCE_ZIP_FILE = timestamp-app.zip
 SOURCE_S3_BUCKET = tf-codepipeline-source-timestamp-app
 ARTIFACT_S3_BUCKET = tf-codepipeline-artifacts-timestamp-app
 
 CURRENT_REGION := $(shell aws ec2 describe-availability-zones --output text --query 'AvailabilityZones[0].[RegionName]' | cat)
-CLUSTER_NAME = tf-cluster-timestamp-app-0
+CLUSTER_NAME = tf-cluster-jsmiley-timestamp-app-0
 
 default: provision
 
@@ -24,13 +23,13 @@ tf-init:
 	$(TERRAFORM_CMD) init
 
 tf-plan:
-	$(TERRAFORM_CMD) plan -var-file=$(TERRAFORM_VARS_FILE)
+	$(TERRAFORM_CMD) plan
 
 tf-apply:
-	$(TERRAFORM_CMD) apply -var-file=$(TERRAFORM_VARS_FILE)
+	$(TERRAFORM_CMD) apply
 
 tf-destroy:
-	$(TERRAFORM_CMD) destroy --auto-approve
+	$(TERRAFORM_CMD) destroy
 
 cicd-zip-code:
 	mkdir -p tmp/
@@ -39,7 +38,7 @@ cicd-zip-code:
 cicd-upload-zip:
 	aws s3 cp tmp/$(SOURCE_ZIP_FILE) s3://$(SOURCE_S3_BUCKET)/$(SOURCE_ZIP_FILE)
 
-provision-cluster: kube-update-config
+kube-provision-cluster: kube-update-config
 	kubectl apply -f https://raw.githubusercontent.com/kubernetes/ingress-nginx/controller-v0.43.0/deploy/static/provider/aws/deploy.yaml
 	kubectl apply -f deployments
 

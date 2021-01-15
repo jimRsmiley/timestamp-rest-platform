@@ -1,8 +1,6 @@
 .DS_Store
 tmp/
-*.auto.tfvars
 *.swp
-*.tfstate*
 node_modules/
-.local-backend
-.terraform*
+.terraform/
+.terraform.lock.hcl
