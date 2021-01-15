@@ -9,6 +9,7 @@ env: # Or as an environment variable
   
 jobs:
   build:
+    environment: aws
     runs-on: ubuntu-latest
       
     steps:
