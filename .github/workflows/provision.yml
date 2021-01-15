@@ -13,7 +13,7 @@ jobs:
 
     steps:
     - name: output region env
-      run: echo $AWS_DEFAULT_REGION
+      run: echo $AWS_DEFAULT_REGION && echo $AWS_ACCESS_KEY_ID
 
     - uses: actions/checkout@v2
 
