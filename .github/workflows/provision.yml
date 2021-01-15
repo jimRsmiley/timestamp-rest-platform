@@ -12,6 +12,10 @@ jobs:
     name: "Terraform"
     runs-on: ubuntu-latest
     steps:
+
+      - name: Output AWS CLI version
+        run: aws --version
+        
       - name: Dump GitHub context
         env:
           GITHUB_CONTEXT: ${{ toJson(github) }}
