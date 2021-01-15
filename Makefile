@@ -1,6 +1,5 @@
 current_dir = $(shell pwd)
 TERRAFORM_CMD = cd terraform && terraform
-TERRAFORM_VARS_FILE= $(current_dir)/terraform/terraform.auto.tfvars
 SOURCE_ZIP_FILE = timestamp-app.zip
 SOURCE_S3_BUCKET = tf-codepipeline-source-timestamp-app
 ARTIFACT_S3_BUCKET = tf-codepipeline-artifacts-timestamp-app
@@ -24,10 +23,10 @@ tf-init:
 	$(TERRAFORM_CMD) init
 
 tf-plan:
-	$(TERRAFORM_CMD) plan -var-file=$(TERRAFORM_VARS_FILE)
+	$(TERRAFORM_CMD) plan
 
 tf-apply:
-	$(TERRAFORM_CMD) apply -var-file=$(TERRAFORM_VARS_FILE)
+	$(TERRAFORM_CMD) apply
 
 tf-destroy:
 	$(TERRAFORM_CMD) destroy --auto-approve
