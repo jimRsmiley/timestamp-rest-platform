@@ -1,4 +1,3 @@
-# 4893 is the IAM account; sandbox is 888458450351
 provider "aws" {
   region = "us-east-1"
 
