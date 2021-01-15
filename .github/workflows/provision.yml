@@ -95,8 +95,8 @@ jobs:
         if: github.ref == 'refs/heads/master' && github.event_name == 'push'
         run: terraform apply -auto-approve
 
-      - name: Test the terraform output command
-        run: terraform output -json eks_cluster_region
+      - name: Add cluster region to environment variables
+        run: echo "CLUSTER_REGION=$(terraform output -json eks_cluster_region)" >> $GITHUB_ENV
 
       - name: Test the jq command
         run: terraform output -json eks_cluster_region | jq -r '.'
