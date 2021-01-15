@@ -88,8 +88,11 @@ jobs:
         if: github.ref == 'refs/heads/master' && github.event_name == 'push'
         run: cd terraform && terraform apply -auto-approve
 
+      - name: Test the terraform output command
+        run: cd terraform && terraform output -json eks_cluster_region
+
       - name: Test the jq command
         run: cd terraform && terraform output -json eks_cluster_region | jq -r .
-        
+
       - name: Set kubectl context
-        run: aws eks --region $(cd terraform && terraform output -json eks_cluster_region | jq -r) update-kubeconfig --name $(cd terraform && terraform output -json eks_cluster_id | jq -r)
+        run: aws eks --region $(cd terraform && terraform output -json eks_cluster_region | jq -r .) update-kubeconfig --name $(cd terraform && terraform output -json eks_cluster_id | jq -r .)
