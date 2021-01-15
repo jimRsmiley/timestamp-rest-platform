@@ -1,6 +1,6 @@
 current_dir = $(shell pwd)
 TERRAFORM_CMD = cd terraform && terraform
-TERRAFORM_VARS_FILE= $(current_dir)/terraform.auto.tfvars
+TERRAFORM_VARS_FILE= $(current_dir)/terraform/terraform.auto.tfvars
 SOURCE_ZIP_FILE = timestamp-app.zip
 SOURCE_S3_BUCKET = tf-codepipeline-source-timestamp-app
 ARTIFACT_S3_BUCKET = tf-codepipeline-artifacts-timestamp-app
