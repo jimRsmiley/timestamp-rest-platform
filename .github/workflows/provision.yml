@@ -26,10 +26,7 @@ jobs:
       - name: Output version of kubectl
         run: kubectl version --client
         
-      - name: Dump GitHub context
-        env:
-          GITHUB_CONTEXT: ${{ toJson(github) }}
-        run: echo "$GITHUB_CONTEXT"
+
 
       - name: Checkout
         uses: actions/checkout@v2
@@ -89,6 +86,11 @@ jobs:
       - name: Add cluster region to environment variables
         id: cluster_region
         run: cd ./terraform && echo "::set-output name=cluster_region::$(terraform output -json eks_cluster_region)"
+
+      - name: Dump GitHub context
+        env:
+          GITHUB_CONTEXT: ${{ toJson(steps.cluster_region.outputs) }}
+        run: echo "$GITHUB_CONTEXT"
 
       - name: Echo cluster region
         run: |
