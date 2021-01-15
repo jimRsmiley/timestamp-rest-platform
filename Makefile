@@ -28,6 +28,8 @@ tf-plan:
 tf-apply:
 	$(TERRAFORM_CMD) apply
 
+tf-output:
+	$(TERRAFORM_CMD) output
 tf-destroy:
 	$(TERRAFORM_CMD) destroy
 
