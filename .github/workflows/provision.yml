@@ -11,15 +11,12 @@ jobs:
   terraform:
     name: "Terraform"
     runs-on: ubuntu-latest
-    defaults:
-      run:
-        working-directory: ./terraform
     steps:
 
       - name: Delete AWS CLI v1
         run: sudo rm -rf /usr/local/aws && sudo rm -f /usr/local/bin/aws
         continue-on-error: true
-        
+
       - name: Install AWS CLI v2
         run: curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip" && unzip awscliv2.zip && sudo ./aws/install
 
@@ -44,22 +41,22 @@ jobs:
           cli_config_credentials_token: ${{ secrets.TF_API_TOKEN }}
 
       - name: Output Terraform version
-        run: terraform version
+        run: cd ./terraform && terraform version
 
       - name: Terraform Format
         id: fmt
-        run: terraform fmt -check
+        run: cd ./terraform && terraform fmt -check
 
       - name: Terraform Init
         id: init
-        run: terraform init
+        run: cd ./terraform && terraform init
 
       - name: Terraform Plan
         id: plan
         if: github.event_name == 'pull_request'
-        run: terraform plan -no-color
+        run: cd ./terraform && terraform plan -no-color
         continue-on-error: true
-
+        
       - uses: actions/github-script@0.9.0
         if: github.event_name == 'pull_request'
         env:
@@ -87,11 +84,11 @@ jobs:
 
       - name: Terraform Apply
         if: github.ref == 'refs/heads/master' && github.event_name == 'push'
-        run: terraform apply -auto-approve
+        run: cd ./terraform && terraform apply -auto-approve
 
       - name: Add cluster region to environment variables
         id: cluster_region
-        run: echo "::set-output name=cluster_region::$(terraform output -json eks_cluster_region)"
+        run: cd ./terraform && echo "::set-output name=cluster_region::$(terraform output -json eks_cluster_region)"
 
       - name: Echo cluster region
         run: |
