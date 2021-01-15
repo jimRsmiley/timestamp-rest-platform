@@ -92,7 +92,7 @@ jobs:
         run: cd terraform && terraform output -json eks_cluster_region
 
       - name: Test the jq command
-        run: cd terraform && terraform output -json eks_cluster_region | jq -r .
+        run: cd terraform && terraform output -json eks_cluster_region | jq -r '.'
 
       - name: Set kubectl context
         run: aws eks --region $(cd terraform && terraform output -json eks_cluster_region | jq -r .) update-kubeconfig --name $(cd terraform && terraform output -json eks_cluster_id | jq -r .)
