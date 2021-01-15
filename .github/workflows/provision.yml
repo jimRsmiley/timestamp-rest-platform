@@ -46,3 +46,6 @@ jobs:
     - name: Run Terraform plan
       run: cd terraform && terraform plan
 
+    - name: Run Terraform apply
+      run: cd terraform && terraform apply --auto-approve
+
