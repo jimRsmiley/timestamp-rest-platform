@@ -25,8 +25,8 @@ jobs:
       - name: Output AWS CLI version
         run: aws --version && which -a aws
 
-      - name: Output location of kubectl
-        run: which -a kubectl
+      - name: Output version of kubectl
+        run: kubectl version --client
         
       - name: Dump GitHub context
         env:
@@ -87,3 +87,6 @@ jobs:
       - name: Terraform Apply
         if: github.ref == 'refs/heads/master' && github.event_name == 'push'
         run: cd terraform && terraform apply -auto-approve
+
+      - name: Set kubectl context
+        run: aws eks --region $(cd terraform && terraform output -json eks_cluster_region | jq -r) update-kubeconfig --name $(cd terraform && terraform output -json eks_cluster_id | jq -r)

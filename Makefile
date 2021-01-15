@@ -30,6 +30,10 @@ tf-apply:
 
 tf-output:
 	$(TERRAFORM_CMD) output
+
+tf-refresh:
+	$(TERRAFORM_CMD) refresh
+
 tf-destroy:
 	$(TERRAFORM_CMD) destroy
 
