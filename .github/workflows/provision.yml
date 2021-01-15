@@ -15,6 +15,9 @@ jobs:
 
       - name: Output AWS CLI version
         run: aws --version
+
+      - name: Output location of kubectl
+        run: which -a kubectl
         
       - name: Dump GitHub context
         env:
@@ -75,5 +78,3 @@ jobs:
       - name: Terraform Apply
         if: github.ref == 'refs/heads/master' && github.event_name == 'push'
         run: cd terraform && terraform apply -auto-approve
-
-  
