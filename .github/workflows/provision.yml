@@ -85,7 +85,7 @@ jobs:
 
       - name: Add cluster region to environment variables
         id: cluster_region
-        run: cd ./terraform && echo "::set-output name=cluster_region::$(terraform output -json eks_cluster_region | sed 's/"//g' | tr -d '\n')"
+        run: cd ./terraform && echo "::set-output name=cluster_region::$(terraform output -json eks_cluster_region | sed 's/"//g' | sed 's/\n//g')"
 
       - name: Dump GitHub context
         env:
