@@ -1,16 +1,3 @@
-terraform {
-  backend "local" {
-    path = ".local-backend/terraform.tfstate"
-  }
-
-  required_providers {
-    aws = {
-      source  = "hashicorp/aws"
-      version = "~> 3.0"
-    }
-  }
-}
-
 module "network" {
   source       = "./modules/network"
   project_name = var.project_name
