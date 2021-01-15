@@ -8,11 +8,10 @@ on:
 
 jobs:
   
-  terraform:
-    name: "Terraform"
+  install:
+    name: "Install utility commands"
     runs-on: ubuntu-latest
     steps:
-
       - name: Output AWS CLI version
         run: aws --version && which -a aws
 
@@ -32,6 +31,12 @@ jobs:
         env:
           GITHUB_CONTEXT: ${{ toJson(github) }}
         run: echo "$GITHUB_CONTEXT"
+
+  terraform:
+    name: "Terraform"
+    runs-on: ubuntu-latest
+    working-directory: ./terraform
+    steps:
 
       - name: Checkout
         uses: actions/checkout@v2
