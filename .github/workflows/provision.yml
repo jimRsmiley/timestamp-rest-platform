@@ -1,4 +1,4 @@
-name: "Terraform"
+name: "Provision Infrastructure"
 
 on:
   push:
@@ -7,24 +7,27 @@ on:
   pull_request:
 
 jobs:
+  
   terraform:
     name: "Terraform"
     runs-on: ubuntu-latest
     steps:
-
       - name: Dump GitHub context
         env:
           GITHUB_CONTEXT: ${{ toJson(github) }}
         run: echo "$GITHUB_CONTEXT"
-        
+
       - name: Checkout
         uses: actions/checkout@v2
 
       - name: Setup Terraform
         uses: hashicorp/setup-terraform@v1
         with:
-          # terraform_version: 0.13.0:
+          terraform_version: 0.14.2
           cli_config_credentials_token: ${{ secrets.TF_API_TOKEN }}
+
+      - name: Output Terraform version
+        run: terraform version
 
       - name: Terraform Format
         id: fmt
@@ -68,3 +71,5 @@ jobs:
       - name: Terraform Apply
         if: github.ref == 'refs/heads/master' && github.event_name == 'push'
         run: cd terraform && terraform apply -auto-approve
+
+  

@@ -16,3 +16,9 @@ module "code_pipeline" {
   service_s3_deploy_conf_zip_key  = "timestamp-app.zip"
   codebuild_source_s3_bucket_name = "tf-codepipeline-source-${var.project_name}"
 }
+
+module "deploy_app" {
+  source = "./modules/deploy-app"
+
+  bucket_id = module.code_pipeline.codepipeline_source_bucket_id
+}
