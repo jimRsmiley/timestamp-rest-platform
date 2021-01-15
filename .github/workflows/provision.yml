@@ -6,7 +6,9 @@ env: # Or as an environment variable
   AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
   AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
   AWS_DEFAULT_REGION: us-east-1
-  
+  SOURCE_ZIP_FILE: timestamp-app.zip
+  SOURCE_S3_BUCKET: tf-codepipeline-source-timestamp-app  
+
 jobs:
   build:
     environment: aws
@@ -49,3 +51,8 @@ jobs:
     - name: Run Terraform apply
       run: cd terraform && terraform apply --auto-approve
 
+    - name: Zip the code directory
+      run: mkdir -p tmp/ && cd node-app && zip -r ../tmp/${SOURCE_ZIP_FILE} *
+
+    - name: Upload source to S3
+      run: aws s3 cp tmp/${SOURCE_ZIP_FILE} s3://${SOURCE_S3_BUCKET}/${SOURCE_ZIP_FILE}
