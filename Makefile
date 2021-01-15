@@ -5,7 +5,7 @@ SOURCE_S3_BUCKET = tf-codepipeline-source-timestamp-app
 ARTIFACT_S3_BUCKET = tf-codepipeline-artifacts-timestamp-app
 
 CURRENT_REGION := $(shell aws ec2 describe-availability-zones --output text --query 'AvailabilityZones[0].[RegionName]' | cat)
-CLUSTER_NAME = tf-cluster-timestamp-app-0
+CLUSTER_NAME = tf-cluster-jsmiley-timestamp-app-0
 
 default: provision
 
@@ -29,7 +29,7 @@ tf-apply:
 	$(TERRAFORM_CMD) apply
 
 tf-destroy:
-	$(TERRAFORM_CMD) destroy --auto-approve
+	$(TERRAFORM_CMD) destroy
 
 cicd-zip-code:
 	mkdir -p tmp/
