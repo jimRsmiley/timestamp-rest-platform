@@ -89,12 +89,12 @@ jobs:
 
       - name: Output cluster region and name
         run: echo "$cluster_region $cluster_name"
-        with:
+        env:
           cluster_region: ${{ secrets.CLUSTER_REGION }}
           cluster_name: ${{ secrets.CLUSTER_NAME }}
 
       - name: Set kubectl context
         run: aws eks --region $cluster_region update-kubeconfig --name $cluster_name
-        with:
+        env:
           cluster_region: ${{ secrets.CLUSTER_REGION }}
           cluster_name: ${{ secrets.CLUSTER_NAME }}
