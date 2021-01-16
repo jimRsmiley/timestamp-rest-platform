@@ -92,7 +92,7 @@ jobs:
 
       - name: Get name of cluster
         id: cluster_name
-        run: cd ./terraform && echo "::set-output name=cluster_name::$(terraform output -json | tr -d -- '\n' )"
+        run: cd ./terraform && echo "::set-output name=cluster_name::$(terraform output eks_cluster_id | tr -d -- '\n' )"
 
       - name: Dump Cluster name
         env:
