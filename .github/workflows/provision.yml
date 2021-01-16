@@ -22,8 +22,9 @@ jobs:
 
       - name: ensure required commands are installed
         run: |
-          which -a tr && \
-          which -a jq && jq --version
+          uname -a && \
+            which -a tr && \
+            which -a jq && jq --version
 
       - name: Output AWS CLI version
         run: aws --version && which -a aws
@@ -88,7 +89,7 @@ jobs:
 
       - name: Get name of cluster region
         id: region
-        run: cd ./terraform && echo "::set-output name=region::$(terraform output -json eks_cluster_region | sed 's/"//g' | sed 's/\n//g')"
+        run: cd ./terraform && echo "::set-output name=region::$(terraform output -json eks_cluster_region | sed 's/"//g' | tr -d -- '\n')"
 
       - name: Get name of cluster
         id: cluster_name
