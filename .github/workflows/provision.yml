@@ -21,7 +21,9 @@ jobs:
         run: curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip" && unzip awscliv2.zip && sudo ./aws/install
 
       - name: ensure required commands are installed
-        run: which -a tr
+        run: |
+          which -a tr && \
+          which -a jq && jq --version
 
       - name: Output AWS CLI version
         run: aws --version && which -a aws
@@ -90,7 +92,7 @@ jobs:
 
       - name: Get name of cluster
         id: cluster_name
-        run: cd ./terraform && echo "::set-output name=cluster_name::$(terraform output -json | jq -r '.eks_cluster_id.value')"
+        run: cd ./terraform && echo "::set-output name=cluster_name::$(terraform output -json | cat | jq -r '.')"
 
       - name: Dump Cluster name
         env:
