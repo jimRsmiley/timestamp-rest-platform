@@ -101,8 +101,8 @@ jobs:
           cluster_region: ${{ steps.region.outputs.stdout }}
           cluster_name: ${{ steps.cluster_name.outputs.stdout }}
 
-      - name: Set kubectl context
-        run: aws eks --region $cluster_region update-kubeconfig --name $cluster_name
-        env:
-          cluster_region: ${{ steps.region.outputs.stdout }}
-          cluster_name: ${{ steps.cluster_name.outputs.stdout }}
+      # - name: Set kubectl context
+      #   run: aws eks --region $cluster_region update-kubeconfig --name $cluster_name
+      #   env:
+      #     cluster_region: ${{ steps.region.outputs.stdout }}
+      #     cluster_name: ${{ steps.cluster_name.outputs.stdout }}
