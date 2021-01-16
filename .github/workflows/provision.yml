@@ -26,8 +26,6 @@ jobs:
       - name: Output version of kubectl
         run: kubectl version --client
         
-
-
       - name: Checkout
         uses: actions/checkout@v2
 
@@ -83,23 +81,28 @@ jobs:
         if: github.ref == 'refs/heads/master' && github.event_name == 'push'
         run: cd ./terraform && terraform apply -auto-approve
 
-      - name: Add cluster region to environment variables
+      - name: Get name of cluster region
         id: region
         run: cd ./terraform && echo "::set-output name=region::$(terraform output -json eks_cluster_region | sed 's/"//g' | sed 's/\n//g')"
 
-      - name: Dump GitHub context
+      - name: Get name of cluster
+        id: cluster_name
+        run: cd ./terraform && echo "::set-output name=cluster_name::$(terraform output -json cluster_name | sed 's/"//g' | tr -d '\n')"
+
+      - name: Dump Cluster name
         env:
-          GITHUB_CONTEXT: ${{ toJson(steps.region) }}
+          GITHUB_CONTEXT: ${{ toJson(steps.cluster_name) }}
         run: echo "$GITHUB_CONTEXT"
 
       - name: Echo cluster region
         run: |
-          echo "Cluser region is here: $cluster_region"
+          echo "Cluser name=$cluster_name region=$cluster_region"
         env:
           cluster_region: ${{ steps.region.outputs.stdout }}
-
-      - name: Test the jq command
-        run: terraform output -json eks_cluster_region | jq -r '.'
+          cluster_name: ${{ steps.cluster_name.outputs.stdout }}
 
       - name: Set kubectl context
-        run: aws eks --region $(terraform output -json eks_cluster_region | jq -r .) update-kubeconfig --name $(terraform output -json eks_cluster_id | jq -r .)
+        run: aws eks --region $cluster_region update-kubeconfig --name $cluster_name
+        env:
+          cluster_region: ${{ steps.region.outputs.stdout }}
+          cluster_name: ${{ steps.cluster_name.outputs.stdout }}
