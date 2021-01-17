@@ -89,6 +89,17 @@ jobs:
       - name: Wait for the NGINX controller pod to be in running state
         run: kubectl wait --for=condition=ready --timeout=30s pods -l app.kubernetes.io/component=controller -n ingress-nginx
 
+      - name: zip up the service code
+        run: |
+          mkdir -p tmp/
+	        cd node-app && zip -r ../tmp/timestamp-app.zip *
+
+      - name: upload the zip file to S3 to begin CodePipeline
+        run: |
+          aws s3 cp tmp/timestamp-app.zip s3://${source_s3_bucket}/timestamp-app.zip
+        env:
+          source_s3_bucket: ${{ secrets.SOURCE_S3_BUCKET }}
+
       - name: Deploy the timestamp app into the cluster
         run: kubectl apply -f ./deployments
 
