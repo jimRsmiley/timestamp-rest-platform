@@ -88,3 +88,6 @@ jobs:
   
       - name: Deploy the timestamp app into the cluster
         run: kubectl apply -f ./deployments
+
+      - name: Output the ingress hostname
+        run: kubectl get ing -o jsonpath='{.items[*].status.loadBalancer.ingress[*].hostname}'
