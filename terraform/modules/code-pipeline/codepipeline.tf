@@ -1,5 +1,3 @@
-
-
 resource "aws_codepipeline" "default" {
   name     = "tf-${var.project_name}"
   role_arn = aws_iam_role.codepipeline_role.arn
@@ -47,8 +45,6 @@ resource "aws_codepipeline" "default" {
     }
   }
 }
-
-
 
 resource "aws_iam_role" "codepipeline_role" {
   name = "test-role"

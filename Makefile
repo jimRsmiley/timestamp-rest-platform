@@ -53,3 +53,9 @@ kube-update-config:
 
 kube-delete:
 	kubectl delete ns ingress-nginx
+
+act:
+	act \
+		-P ubuntu-18.04=nektos/act-environments-ubuntu:18.04 \
+		--secret-file=./.secrets \
+		-j terraform
