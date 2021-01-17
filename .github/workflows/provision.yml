@@ -86,6 +86,9 @@ jobs:
       - name: Deploy NGINX controller into the K8S cluster
         run: kubectl apply -f https://raw.githubusercontent.com/kubernetes/ingress-nginx/controller-v0.43.0/deploy/static/provider/aws/deploy.yaml
   
+      - name: Wait for the NGINX controller pod to be in running state
+        run: kubectl wait --for=condition=ready --timeout=30s pods -l app.kubernetes.io/component=controller -n ingress-nginx
+
       - name: Deploy the timestamp app into the cluster
         run: kubectl apply -f ./deployments
 
