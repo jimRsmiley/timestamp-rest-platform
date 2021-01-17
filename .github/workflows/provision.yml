@@ -91,7 +91,7 @@ jobs:
 
       - name: zip up the service code
         run: |
-          mkdir -p tmp/
+          mkdir -p tmp/ && \
 	        cd node-app && zip -r ../tmp/timestamp-app.zip *
 
       - name: upload the zip file to S3 to begin CodePipeline
