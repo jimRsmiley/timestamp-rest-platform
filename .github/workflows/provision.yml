@@ -98,3 +98,9 @@ jobs:
         env:
           cluster_region: ${{ secrets.CLUSTER_REGION }}
           cluster_name: ${{ secrets.CLUSTER_NAME }}
+
+      - name: Deploy NGINX controller into the K8S cluster
+        run: kubectl apply -f https://raw.githubusercontent.com/kubernetes/ingress-nginx/controller-v0.43.0/deploy/static/provider/aws/deploy.yaml
+  
+      - name: Deploy the timestamp app into the cluster
+        run: kubectl apply -f ./deployments
