@@ -22,16 +22,6 @@ jobs:
           aws-region: us-east-1
           role-duration-seconds: 1200
         
-      - name: Output AWS CLI version
-        run: aws --version
-        
-      - name: output put some version details of the system and commands
-        run: |
-          uname -a && \
-            which -a tr && \
-            which -a jq && jq --version && \
-            kubectl version --client
-        
       - name: Checkout
         uses: actions/checkout@v2
 
@@ -86,12 +76,6 @@ jobs:
       - name: Terraform Apply
         if: github.ref == 'refs/heads/master' && github.event_name == 'push'
         run: cd ./terraform && terraform apply -auto-approve
-
-      - name: Output cluster region and name
-        run: echo "$cluster_region $cluster_name"
-        env:
-          cluster_region: ${{ secrets.CLUSTER_REGION }}
-          cluster_name: ${{ secrets.CLUSTER_NAME }}
 
       - name: Set kubectl context
         run: aws eks --region $cluster_region update-kubeconfig --name $cluster_name
