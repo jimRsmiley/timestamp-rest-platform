@@ -13,21 +13,14 @@ jobs:
     runs-on: ubuntu-latest
     steps:
 
-      # - name: Delete AWS CLI v1
-      #   run: sudo rm -rf /usr/local/aws && sudo rm -f /usr/local/bin/aws
-      #   continue-on-error: true
-
-      # - name: Install AWS CLI v2
-      #   run: curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip" && unzip awscliv2.zip && sudo ./aws/install
-
-    - name: Configure AWS Credentials
-      uses: aws-actions/configure-aws-credentials@v1
-      with:
-        aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
-        aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-        role-to-assume: ${{ secrets.AWS_ROLE_TO_ASSUME }}
-        aws-region: us-east-1
-        role-duration-seconds: 1200
+      - name: Configure AWS Credentials
+        uses: aws-actions/configure-aws-credentials@v1
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          role-to-assume: ${{ secrets.AWS_ROLE_TO_ASSUME }}
+          aws-region: us-east-1
+          role-duration-seconds: 1200
         
       - name: Output AWS CLI version
         run: aws --version
