@@ -7,20 +7,21 @@ on:
   pull_request:
 
 jobs:
-  
+
   terraform:
     name: "Terraform"
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-18.04
     steps:
 
-      - name: Output AWS CLI version
-        run: aws --version
+      - name: Configure AWS Credentials
+        uses: aws-actions/configure-aws-credentials@v1
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          role-to-assume: ${{ secrets.AWS_ROLE_TO_ASSUME }}
+          aws-region: us-east-1
+          role-duration-seconds: 1200
         
-      - name: Dump GitHub context
-        env:
-          GITHUB_CONTEXT: ${{ toJson(github) }}
-        run: echo "$GITHUB_CONTEXT"
-
       - name: Checkout
         uses: actions/checkout@v2
 
@@ -31,22 +32,22 @@ jobs:
           cli_config_credentials_token: ${{ secrets.TF_API_TOKEN }}
 
       - name: Output Terraform version
-        run: terraform version
+        run: cd ./terraform && terraform version
 
       - name: Terraform Format
         id: fmt
-        run: cd terraform && terraform fmt -check
+        run: cd ./terraform && terraform fmt -check
 
       - name: Terraform Init
         id: init
-        run: cd terraform && terraform init
+        run: cd ./terraform && terraform init
 
       - name: Terraform Plan
         id: plan
         if: github.event_name == 'pull_request'
-        run: cd terraform && terraform plan -no-color
+        run: cd ./terraform && terraform plan -no-color
         continue-on-error: true
-
+        
       - uses: actions/github-script@0.9.0
         if: github.event_name == 'pull_request'
         env:
@@ -74,6 +75,38 @@ jobs:
 
       - name: Terraform Apply
         if: github.ref == 'refs/heads/master' && github.event_name == 'push'
-        run: cd terraform && terraform apply -auto-approve
+        run: cd ./terraform && terraform apply -auto-approve
 
+      - name: Set kubectl context
+        run: aws eks --region $cluster_region update-kubeconfig --name $cluster_name
+        env:
+          cluster_region: ${{ secrets.CLUSTER_REGION }}
+          cluster_name: ${{ secrets.CLUSTER_NAME }}
+
+      - name: Deploy NGINX controller into the K8S cluster
+        run: kubectl apply -f https://raw.githubusercontent.com/kubernetes/ingress-nginx/controller-v0.43.0/deploy/static/provider/aws/deploy.yaml
   
+      - name: output the pods in the ingress-nginx deployment
+        
+      - name: Wait for the NGINX controller pod to be in running state
+        run: kubectl wait --for=condition=ready --timeout=30s pods -l app.kubernetes.io/component=controller -n ingress-nginx
+
+      - name: zip up the service code
+        run: |
+          mkdir -p tmp/ && \
+          cd node-app && zip -r ../tmp/timestamp-app.zip *
+
+      - name: upload the zip file to S3 to begin CodePipeline
+        run: |
+          aws s3 cp tmp/timestamp-app.zip s3://${source_s3_bucket}/timestamp-app.zip
+        env:
+          source_s3_bucket: ${{ secrets.SOURCE_S3_BUCKET }}
+
+      - name: Deploy the timestamp app into the cluster
+        run: kubectl apply -f ./deployments
+
+      - name: Wait for the timestamp service pod to start
+        run: kubectl wait --for=condition=ready --timeout=30s pods -l app=timestamp-app -n default
+
+      - name: Output the ingress hostname
+        run: kubectl get ing -o jsonpath='{.items[*].status.loadBalancer.ingress[*].hostname}'
