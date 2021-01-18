@@ -1,17 +1,3 @@
-resource "aws_s3_bucket" "codepipeline_source" {
-  bucket = var.codebuild_source_s3_bucket_name
-  acl    = "private"
-
-  versioning {
-    enabled = true
-  }
-}
-
-resource "aws_s3_bucket" "codepipeline_artifacts" {
-  bucket = "tf-codepipeline-artifacts-${var.project_name}"
-  acl    = "private"
-}
-
 resource "aws_codepipeline" "default" {
   name     = "tf-${var.project_name}"
   role_arn = aws_iam_role.codepipeline_role.arn
@@ -59,8 +45,6 @@ resource "aws_codepipeline" "default" {
     }
   }
 }
-
-
 
 resource "aws_iam_role" "codepipeline_role" {
   name = "test-role"

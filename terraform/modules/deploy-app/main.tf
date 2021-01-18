@@ -17,5 +17,4 @@ resource "aws_s3_bucket_object" "codepipeline_source" {
   key    = local.zipfile_object_key
   acl    = "private" # or can be "public-read"
   source = data.archive_file.codepipeline_source.output_path
-  etag   = filemd5(data.archive_file.codepipeline_source.output_path)
 }
