@@ -105,5 +105,8 @@ jobs:
       - name: Deploy the timestamp app into the cluster
         run: kubectl apply -f ./deployments
 
+      - name: Wait for the timestamp service pod to start
+        run: kubectl wait --for=condition=ready --timeout=30s pods -l app=timestamp-app -n default
+
       - name: Output the ingress hostname
         run: kubectl get ing -o jsonpath='{.items[*].status.loadBalancer.ingress[*].hostname}'
