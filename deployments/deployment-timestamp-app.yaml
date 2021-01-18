@@ -13,7 +13,7 @@ spec:
         app: timestamp-app
     spec:
       containers:
-      - image: 888458450351.dkr.ecr.us-east-1.amazonaws.com/tf-timestamp-app-0:latest
+      - image: 888458450351.dkr.ecr.us-east-1.amazonaws.com/tf-jsmiley-timestamp-app-0:latest
         name: timestamp-app
         ports:
         - containerPort: 3000
