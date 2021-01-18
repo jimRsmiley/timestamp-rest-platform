@@ -1,8 +1,8 @@
 current_dir = $(shell pwd)
 TERRAFORM_CMD = cd terraform && terraform
 SOURCE_ZIP_FILE = timestamp-app.zip
-SOURCE_S3_BUCKET = tf-codepipeline-source-timestamp-app
-ARTIFACT_S3_BUCKET = tf-codepipeline-artifacts-timestamp-app
+SOURCE_S3_BUCKET = tf-codepipeline-source-jsmiley-timestamp-app
+ARTIFACT_S3_BUCKET = tf-codepipeline-artifacts-jsmiley-timestamp-app
 
 CURRENT_REGION := $(shell aws ec2 describe-availability-zones --output text --query 'AvailabilityZones[0].[RegionName]' | cat)
 CLUSTER_NAME = tf-cluster-jsmiley-timestamp-app-0
@@ -52,10 +52,11 @@ kube-update-config:
 	aws eks --region $(CURRENT_REGION) update-kubeconfig --name $(CLUSTER_NAME)
 
 kube-delete:
+	kubectl delete -f deployments
 	kubectl delete ns ingress-nginx
 
 act:
-	act \
+	act pull_request \
 		-P ubuntu-18.04=nektos/act-environments-ubuntu:18.04 \
 		--secret-file=./.secrets \
 		-j terraform
