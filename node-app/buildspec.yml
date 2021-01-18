@@ -1,17 +1,24 @@
 version: 0.2
-      
+
+env:
+  variables:
+    ECR_REPOSITORY_NAME: tf-jsmiley-timestamp-app-0
+    ACCOUNT_ID: 888458450351
+    ECR_REGISTRY_URL: 888458450351.dkr.ecr.us-east-1.amazonaws.com
+    REGION: us-east-1
+
 phases:
 
   pre_build:
     commands:
       - aws --version
-      - aws ecr get-login-password --region us-east-1 | docker login --username AWS --password-stdin 888458450351.dkr.ecr.us-east-1.amazonaws.com
+      - aws ecr get-login-password --region ${REGION} | docker login --username AWS --password-stdin ${ECR_REGISTRY_URL}
 
   build:
     commands:
-      - docker build -t tf-timestamp-app-0 .
+      - docker build -t ${ECR_REPOSITORY_NAME}:latest .
       
   post_build:
     commands:
-      - docker tag tf-timestamp-app-0:latest 888458450351.dkr.ecr.us-east-1.amazonaws.com/tf-timestamp-app-0:latest
-      - docker push 888458450351.dkr.ecr.us-east-1.amazonaws.com/tf-timestamp-app-0:latest
+      - docker tag ${ECR_REPOSITORY_NAME}:latest ${ECR_REGISTRY_URL}/${ECR_REPOSITORY_NAME}:latest
+      - docker push ${ECR_REGISTRY_URL}/${ECR_REPOSITORY_NAME}:latest
